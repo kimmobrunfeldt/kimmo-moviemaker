@@ -23,4 +23,5 @@ After that, create a new shortcut in file explorer which has target set as `powe
 * https://stackoverflow.com/questions/7333232/how-to-concatenate-two-mp4-files-using-ffmpeg
 * https://superuser.com/questions/106360/how-to-enable-execution-of-powershell-scripts
 * http://ffmpeg.org/download.html
+* https://trac.ffmpeg.org/wiki/Seeking about how -ss and -to parameters work
  
