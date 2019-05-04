@@ -118,10 +118,10 @@ For ($i = 0; $i -lt $tmppieces.Length; $i++) {
 }
 
 $extension = [System.IO.Path]::GetExtension($tmppieces[0])
-$concatcmd += " -filter_complex '$filterpart concat=n=${filecount}:v=1:a=1 [v] [a]' -map '[v]' -map '[a]' output${extension}"
-
+$concatcmd += " -filter_complex '$filterpart concat=n=${tmppieces.length}:v=1:a=1 [v] [a]' -map '[v]' -map '[a]' output${extension}"
 
 write-host $concatcmd
 iex $concatcmd
 
+write-host "`nVideo written to output${extension}`n"
 read-host -prompt "Press enter to exit"
