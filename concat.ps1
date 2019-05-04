@@ -72,8 +72,8 @@ do {
     }
     
     # https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video
-    $start = read-host -prompt "Start time in ffmpeg format [hh:mm:ss] (leave empty for start of the video)"
-    $end = read-host -prompt "End time in ffmpeg format [hh:mm:ss] (leave empty for end of the video)"
+    $start = read-host -prompt "Start time in ffmpeg format [mm:ss] (leave empty for start of the video)"
+    $end = read-host -prompt "End time in ffmpeg format [mm:ss] (leave empty for end of the video)"
     $pieces += [PsObject]@{ start=$start; end=$end; index=$filenum }
 
     print-pieces $pieces
@@ -93,16 +93,18 @@ For ($i = 0; $i -lt $pieces.Length; $i++) {
   
     $tmppieces += $tmpfilename
 
-    $cutcmd = "ffmpeg"
+    $cutcmd = "ffmpeg -i '$filepath'"
     if (-not [string]::IsNullOrWhiteSpace($piece.start)) {
         $cutcmd += " -ss $($piece.start)"
+    } else {
+        $cutcmd += " -ss 00:00:00"
     }
 
     if (-not [string]::IsNullOrWhiteSpace($piece.end)) {
         $cutcmd += " -to $($piece.end)"
     }
 
-    $cutcmd += " -i '$filepath' '$tmpfilename'"
+    $cutcmd += " '$tmpfilename'"
 
     write-host $cutcmd
     iex $cutcmd
@@ -117,11 +119,16 @@ For ($i = 0; $i -lt $tmppieces.Length; $i++) {
     $filterpart += "[${i}:v] [${i}:a] "
 }
 
+$piecescount = $tmppieces.Length
 $extension = [System.IO.Path]::GetExtension($tmppieces[0])
-$concatcmd += " -filter_complex '$filterpart concat=n=${tmppieces.length}:v=1:a=1 [v] [a]' -map '[v]' -map '[a]' output${extension}"
+$concatcmd += " -filter_complex '$filterpart concat=n=${piecescount}:v=1:a=1 [v] [a]' -map '[v]' -map '[a]' output${extension}"
 
 write-host $concatcmd
 iex $concatcmd
+
+ForEach ($tmpfile in $tmppieces) {
+    Remove-Item -Path "$tmpfile"
+}
 
 write-host "`nVideo written to output${extension}`n"
 read-host -prompt "Press enter to exit"
