@@ -2,6 +2,15 @@
 
 Powershell and ffmpeg glue for concatenating videos. Created for situations where you want to simply cut parts of bunch of videos and concatenate them to a new single video.
 
+**Features**
+
+* Kick-ass logo
+* No UI
+* Hard to install and use
+* Does only one thing
+* Uses ffmpeg so possibilities to mistype parameters are endless
+* I learned PowerShell
+
 ## Usage
 
 Drag the source videos into the kimmomoviemaker shortcut in File Explorer and follow instructions.
